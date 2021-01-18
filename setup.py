@@ -11,4 +11,3 @@ setup(
     packages=['BR_ML'],
     zip_safe=False
 )
-
