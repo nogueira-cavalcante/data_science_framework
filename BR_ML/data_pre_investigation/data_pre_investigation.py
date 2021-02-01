@@ -1,8 +1,3 @@
-"""
-Funções de geração de gráficos para pré-investigação.
-"""
-
-
 def matriz_dispersao(df, target_col, features_cols,
                      fig_size_x=15, fig_size_y=15):
 

@@ -1,13 +1,48 @@
-"""
-Funções para separação do conjunto de dados em treino e teste.
-"""
-
-
-def separacao_dados_treino_teste(df, target_col, sep_type, features_cols=[],
+def separacao_dados_treino_teste(df, sep_type, target_col, features_cols=[],
                                  cat_cont_var_bins=5, test_size=0.2,
                                  random_state=10):
 
     """
+    Separa o DataFrame de entrada em treino e teste, de acordo com o tipo de
+    separação escolhido (parâmetro sep_type).
+
+    Args:
+        df (pandas DataFrame): DataFrame contendo as features e o target.
+        sep_type (string): Tipo de separação treino-teste. É possível
+                           escolher os seguintes tipos:
+                           - "time-series": O índice do DataFrame de entrada
+                                            precisa estar no formato datetime.
+                                            Logo, o DaFrame é ordenado pelo
+                                            índice, a parte de treino recebe
+                                            a parte inicial e o treino a parte
+                                            restante, de acordo com o valor em
+                                            test_size.
+                           - "regression": É criada uma varível categórica
+                                           temporárica baseada no target e no
+                                           valor em cat_cont_var_bins. Logo,
+                                           a separação treino-teste é
+                                           estratificada baseada nessa variável
+                                           categórica temporária.
+                           - "classification": A separação treino-teste é
+                                               estratificada baseada no target.
+        target_col (string): Nome do target.
+        features_cols (list): Lista contendo os nomes das features.
+        cat_cont_var_bins (integer): Quantidade de bins para a divisão do
+                                     target contínuo e assim criar a separação
+                                     treino-teste estratificada. Usada apenas
+                                     quando sep_type="regression".
+        test_size (float): Tamanho da amostra de teste, dado em fração do total
+                           de registros do DataFrame de entrada.
+        random_state (integer): Semente usada para a separação treino-teste
+                                (apenas para os modos "regression" e
+                                "classification").
+
+    Return:
+        Total de quatro DataFrames (X_train, y_train, X_test, y_test).
+
+    Imports:
+        import pandas as pd
+        from sklearn.model_selection import train_test_split
     """
 
     import pandas as pd
@@ -16,13 +51,6 @@ def separacao_dados_treino_teste(df, target_col, sep_type, features_cols=[],
     if (test_size <= 0) or (test_size >= 0.5):
         raise Exception('A fração da amostra de teste deve ser maior que' +
                         ' 0.0 e menor que 0.5.')
-
-    if ((sep_type != 'classification') and
-       (sep_type != 'regression') and
-       (sep_type != 'time_series')):
-        raise Exception('Valor inválido no parâmetro sep_type ' +
-                        '(somente classification, regression e time_series ' +
-                        'são permitidos)')
 
     if len(features_cols) == 0:
         features_cols = list(df.drop(columns=target_col).columns)
@@ -57,15 +85,20 @@ def separacao_dados_treino_teste(df, target_col, sep_type, features_cols=[],
     elif sep_type == 'time_series':
 
         index_type = str(df_temp.index.dtype)
-        if 'datetime' not in index_type:
+        if ('datetime' not in index_type) and ('period' not in index_type):
             raise Exception('O indice do DataFrame deve estar no ' +
-                            'formato datetime.')
+                            'formato datetime ou period.')
 
         df_temp.sort_index(inplace=True)
 
         train_size = int(df_temp.shape[0] * (1.-test_size))
         train = df_temp.iloc[:train_size, :]
         test = df_temp.iloc[train_size:, :]
+
+    else:
+        raise Exception('Valor inválido no parâmetro sep_type ' +
+                        '(somente "classification", "regression" e ' +
+                        '"time_series" são permitidos)')
 
     X_train = train[features_cols].copy()
     y_train = train[[target_col]].copy()
