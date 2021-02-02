@@ -10,7 +10,5 @@ result interpretation -> lime/shape
 pipeline para produção
 monitoring
 
-test time augmentation
-
 
 
