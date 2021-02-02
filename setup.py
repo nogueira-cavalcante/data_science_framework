@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='BR_ML',
+    name='BRADA',
     version='0.0.1',
     description='My private package from private github repo',
     url='https://github.com/nogueira-cavalcante/BR_ML.git',
