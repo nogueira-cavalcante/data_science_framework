@@ -1,0 +1,14 @@
+train test split -> classificacao e regressão (shuffle, seed)
+
+date -> tratamento de datas, criar novas colunas a partir da coluna
+sca -> scaling, padronização, normalização, boxcox (gerar pkl com data e nome do projeto)
+discre -> discretização de variáveis contínuas para as features
+
+outlier -> pyod
+imputation -> interpolation
+
+FS wraper -> feature selection backward e forward (escolher estimador árvore (ExtraTree) , número, classificacao ou regressao)
+FS RFE -> feature selection RFE (escolher estimador árvore (ExtraTree))
+
+auto ml TS -> bayesiano
+

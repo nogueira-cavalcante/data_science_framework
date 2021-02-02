@@ -1,0 +1,16 @@
+quality_check -> algumas funções do data_cleaning deveriam estar aqui
+train_test_split
+data_cleaning -> remoção de linhas, colunas e outliers e impute de missing
+feature engineering -> falta balanceamento de classes (imblearn)
+análise exploratória -> investigação
+feature selection -> as estapas que faltam deixar pra Viviane
+automl
+error analysis
+result interpretation -> lime/shape
+pipeline para produção
+monitoring
+
+test time augmentation
+
+
+

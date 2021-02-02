@@ -1,13 +1,14 @@
-# BRADA - BR Distribuidora Advanced Analytics Framework
+# BRADA
+## BR Distribuidora Advanced Analytics Framework
 
-## quality_check -> algumas funções do data_cleaning deveriam estar aqui
-## train_test_split
-## data_cleaning
-## feature engineering
-## exploratory analysis
-## feature selection
-## automl
-## error analysis
-## result interpretation
-## production pipeline 
-## monitoring
+1. Quality check
+1. Train-test split
+1. Data cleaning
+1. Feature engineering
+1. Exploratory analysis
+1. Feature selection
+1. Automl
+1. Error analysis
+1. Result interpretation
+1. Production pipeline 
+1. Monitoring
