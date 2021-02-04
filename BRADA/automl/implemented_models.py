@@ -13,9 +13,10 @@ def models_time_series():
 
 def models_regression():
 
-    from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor
-    from sklearn.ensemble import AdaBoostRegressor, GradientBoostingRegressor
     from sklearn.ensemble import RandomForestRegressor
+    from sklearn.ensemble import ExtraTreesRegressor
+    from sklearn.ensemble import AdaBoostRegressor
+    from sklearn.ensemble import GradientBoostingRegressor
     from xgboost import XGBRegressor
 
     implemented_models = dict()

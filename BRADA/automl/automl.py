@@ -1,6 +1,75 @@
+"""Aprendizado de máquina automático."""
+
+
 def automl(X_train, y_train, training_type, info_model_matrix, n_splits=2,
            validation_size=0.1, random_state=10):
+    """
+    Treinamento supervisionado utilizando otimização bayesiana.
 
+    Esta função utiliza o pacote skopt para a otimização dos hiperparâmetros.
+    Atualmente, para cada tipo de treinamento (training_type) esta função
+    suporta os seguintes modelos:
+        - classification:
+            - 'logistic_regression';
+            - 'svc';
+            - 'random_forest'.
+        - regression:
+            - 'ada_boost';
+            - 'extra_tree';
+            - 'gbm';
+            - 'random_forest';
+            - 'xg_boost'.
+        - time_series:
+            - 'sarimax'.
+
+    Parameters
+    ----------
+    X_train : pandas DataFrame
+        DataFrame contendo as features.
+    y_train : pandas DataFrame
+        DataFrame contendo o target.
+    training_type : string
+        Tipo de treinamento ("time_series", "regression" e "classification")
+    info_model_matrix : two-dimensional list (array)
+        Matriz do tipo lista(ou do tipo numpy array). Cada linha da matriz
+        deve conter:
+            - string: nome do modelo desejado implementado;
+            - dict: dicionário contendo o espaço de parâmetros para o modelo
+              escolhido;
+            - integer: quantidade de iterações para o estimador bayesiano.
+    n_splits : integer, optional
+        Quantidade de separações da amostra de treino para o crss-validation.
+        O valor padrão é 2.
+    validation_size : float, optional
+        Tamanho da amostra de validação que será criada a partir da amostra de
+        de treino. Este valor deve ser maior que 0 e menor que 0.5. O valor
+        padrão é 0.1.
+    random_state : integer or RandomState, optional
+        Gerador numérico para ser usado para a geração da amostra aleatória.
+        O valor padrão é 10.
+
+    Raises
+    ------
+    Exception
+        - Valor em validation_size não estiver entre 0.0 e 0.5;
+        - Tipo de treinamento em training_type for diferente de
+          "classification", "regression" ou "time_series";
+        - Nome do modelo não corresponder ao implementado;
+        - Parâmetros de um determinado modelo não existir no modelo;
+        - Números de iterações for inferior ao total de possíveis iterações
+          correspondentes ao espaço de parâmetros informados.
+
+    Returns
+    -------
+    df_best_models : pandas Dataframe
+        DataFrame contendo as seguintes colunas:
+            - name_models: Nomes dos modelos otimizados;
+            - best_score: valor da melhor métrica por modelo
+                          (roc_aux para "classification" e r2 para
+                           "regression" e "time_series");
+            - model: objeto contendo o modelo treinado.
+
+    """
     import time
     import inspect
     import numpy as np
@@ -14,20 +83,18 @@ def automl(X_train, y_train, training_type, info_model_matrix, n_splits=2,
     else:
         train_size = int(X_train.shape[0] * (1 - validation_size))
 
-    if training_type == 'time_series':
+    if training_type == 'classification':
 
-        from .implemented_models import models_time_series
-        implemented_models, default_parameter_space = models_time_series()
+        from .implemented_models import models_classification
+        implemented_models, default_parameter_space = models_classification()
 
-        from sklearn.model_selection import TimeSeriesSplit
-        cv = TimeSeriesSplit(n_splits=n_splits,
-                             max_train_size=train_size)
+        from sklearn.model_selection import StratifiedShuffleSplit
+        cv = StratifiedShuffleSplit(n_splits=n_splits,
+                                    train_size=train_size,
+                                    random_state=random_state)
 
-        from sklearn.metrics import r2_score
-        scorer = make_scorer(r2_score,
-                             greater_is_better=True)
-
-        score_column_name = 'best_r2_score'
+        scorer = 'roc_auc_ovr_weighted'
+        score_column_name = 'best_roc_auc_score'
 
     elif training_type == 'regression':
 
@@ -45,20 +112,20 @@ def automl(X_train, y_train, training_type, info_model_matrix, n_splits=2,
 
         score_column_name = 'best_r2_score'
 
-    elif training_type == 'classification':
+    elif training_type == 'time_series':
 
-        from .implemented_models import models_classification
-        implemented_models, default_parameter_space = models_classification()
+        from .implemented_models import models_time_series
+        implemented_models, default_parameter_space = models_time_series()
 
-        from sklearn.model_selection import StratifiedShuffleSplit
-        cv = StratifiedShuffleSplit(n_splits=n_splits,
-                                    train_size=train_size,
-                                    random_state=random_state)
+        from sklearn.model_selection import TimeSeriesSplit
+        cv = TimeSeriesSplit(n_splits=n_splits,
+                             max_train_size=train_size)
 
-        from sklearn.metrics import roc_auc_score
-        scorer = 'roc_auc_ovr_weighted'
+        from sklearn.metrics import r2_score
+        scorer = make_scorer(r2_score,
+                             greater_is_better=True)
 
-        score_column_name = 'best_roc_auc_score'
+        score_column_name = 'best_r2_score'
 
     else:
         raise Exception('O tipo de treinamento especificado em ' +
@@ -136,6 +203,7 @@ def automl(X_train, y_train, training_type, info_model_matrix, n_splits=2,
                                      cv=cv,
                                      random_state=random_state,
                                      )
+
         bayes_search.fit(X=X_train, y=y_train)
         bayes_best_score.append(bayes_search.best_score_)
         bayes_search_list.append(bayes_search)
