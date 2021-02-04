@@ -37,14 +37,20 @@ def automl(X_train, y_train, training_type, info_model_matrix, n_splits=2,
             - dict: dicionário contendo o espaço de parâmetros para o modelo
               escolhido;
             - integer: quantidade de iterações para o estimador bayesiano.
-    n_splits : integer, optional
+        Exemplo:
+            info_model_matrix=[
+                               ['logistic_regression', {'C': [1, 10]}, 2],
+                               ['svc'; {'penalty': ['l1', 'l2']}, 2],
+                               ['random_forest',{'max_depth': [10, 20]}, 2]
+                              ]
+    n_splits : integer, opcional
         Quantidade de separações da amostra de treino para o crss-validation.
         O valor padrão é 2.
-    validation_size : float, optional
+    validation_size : float, opcional
         Tamanho da amostra de validação que será criada a partir da amostra de
         de treino. Este valor deve ser maior que 0 e menor que 0.5. O valor
         padrão é 0.1.
-    random_state : integer or RandomState, optional
+    random_state : integer ou RandomState, opcional
         Gerador numérico para ser usado para a geração da amostra aleatória.
         O valor padrão é 10.
 

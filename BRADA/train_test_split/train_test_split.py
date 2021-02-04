@@ -1,45 +1,64 @@
+"""Separação treino-testde."""
+
+
 def generic_train_test_split(df, sep_type, target_col, features_cols=None,
                              cat_cont_var_bins=5, test_size=0.2,
                              random_state=10):
     """
-    Separação do DataFrame de entrada em treino e teste.
-
+    Separação genérica do DataFrame de entrada em treino e teste.
 
     Parameters
     ----------
-    df : TYPE
-        DESCRIPTION.
-    sep_type : TYPE
-        DESCRIPTION.
-    target_col : TYPE
-        DESCRIPTION.
-    features_cols : TYPE, optional
-        DESCRIPTION. The default is None.
-    cat_cont_var_bins : TYPE, optional
-        DESCRIPTION. The default is 5.
-    test_size : TYPE, optional
-        DESCRIPTION. The default is 0.2.
-    random_state : TYPE, optional
-        DESCRIPTION. The default is 10.
+    df : pandas DataFrame
+        DataFrame contendo as features e o target.
+    sep_type : string
+        Tipo de separação treino-teste. É possível escolher os seguintes tipos:
+            - "classification": A separação treino-teste é estratificada
+                                  baseada no target.
+            - "regression": É criada uma varível categórica temporárica
+                             baseada no target e no valor em cat_cont_var_bins.
+                             Logo, a separação treino-teste é estratificada
+                             baseada nessa variável categórica temporária.
+           - "time-series": O índice do DataFrame de entrada precisa estar no
+                             formato datetime. Logo, o DaFrame é ordenado pelo
+                             índice, a parte de treino recebe a parte inicial
+                             e o treino a parte restante, de acordo com o
+                             valor em test_size.
+    target_col : string
+        Nome do target.
+    features_cols : list, opcional
+        Lista contendo os nomes das features. O valor padrão é None.
+    cat_cont_var_bins : integer, opcional
+        Quantidade de bins para a divisão do target contínuo e assim criar a
+        separação treino-teste estratificada. Usada apenas quando
+        sep_type="regression". O valor padrão é 5.
+    test_size : float, opcional
+        Tamanho da amostra de teste, dado em fração do total de registros do
+        DataFrame de entrada. O valor padrão é 0.2.
+    random_state : integer ou RandomState, opcional
+         Gerador numérico para ser usado para a geração da amostra aleatória.
+         O valor padrão é 10.
 
     Raises
     ------
     Exception
-        DESCRIPTION.
+        - Valor em test_size não estiver entre 0.0 e 0.5;
+        - O índice do DataFrame não for datetime, caso sep_type="time_series";
+        - Quando sep_type for diferente de "classification", "regression" ou
+         "time_series"
 
     Returns
     -------
-    X_train : TYPE
-        DESCRIPTION.
-    y_train : TYPE
-        DESCRIPTION.
-    X_test : TYPE
-        DESCRIPTION.
-    y_test : TYPE
-        DESCRIPTION.
+    X_train : pandas DataFrame
+        DataFrame contendo as features de treino.
+    y_train : pandas DataFrame
+        DataFrame contendo o target de treino.
+    X_test : pandas DataFrame
+        DataFrame contendo as features de teste.
+    y_test : pandas DataFrame
+        DataFrame contendo o target de teste.
 
     """
-
     import pandas as pd
     from sklearn.model_selection import train_test_split
 
