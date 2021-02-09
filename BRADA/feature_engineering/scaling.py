@@ -1,5 +1,45 @@
-def scaling(df, scaling_methods, kwargs=None):
+"""Escalonamento dos dados."""
 
+
+def scaling(df, scaling_methods=['min_max'], kwargs=None):
+    """
+    Escalonamento dos dados do DataFrame de entrada.
+
+    Esta função utiliza os métodos de escalonamento do scikit-learn.
+
+    Parameters
+    ----------
+    df : pandas DataFrame
+        DataFrame contendo os dados para serem escalanados.
+    scaling_methods : list, optional
+        Lista de string dos métodos de escalonamento. O valor padrão é
+        ['min_max']. Atualmente esta função comporta os seguintes métodos:
+            - 'min_max';
+            - 'max_abs':
+            - 'standard';
+            - 'robust';
+            - 'normalizer';
+            - 'quantile';
+            - 'power_transform'.
+    kwargs : list, optional
+        Lista de dicionários de parâmetros para ser passado para os métodos
+        escolhidos. Caso não seja informado, serão considerados os valores
+        padrões para os parâmetros dos métodos escolhidos. O valor padrão é
+        None.
+
+    Raises
+    ------
+    Exception
+        - Quando o método escolhido não se encontra implementado ou não existe.
+
+    Returns
+    -------
+    df_temp : pandas DataFrame
+        DataFrame escalonado.
+    pipe : object
+        Objeto pipe contendo os objetos dos método escolhidos.
+
+    """
     import pandas as pd
     from sklearn.pipeline import Pipeline
 
