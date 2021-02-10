@@ -6,5 +6,5 @@ save_non_project_files = False
 
 [main]
 version = 0.2.0
-recent_files = ['exploratory_analysis\\exploratory_analysis.py']
+recent_files = ['result_interpretation\\lime_tabular.py', 'result_interpretation\\result_interpretation.py']
 
