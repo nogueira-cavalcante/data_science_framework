@@ -91,8 +91,9 @@ def bayes_search(X_train, y_train, training_type, info_model_matrix,
 
     if training_type == 'classification':
 
-        from .implemented_models import models_classification
-        implemented_models, default_parameter_space = models_classification()
+        from .classification_models import classification_models
+        im, dps = classification_models(random_state)
+        implemented_models, default_parameter_space = im, dps
 
         from sklearn.model_selection import StratifiedShuffleSplit
         cv = StratifiedShuffleSplit(n_splits=n_splits,
@@ -104,8 +105,9 @@ def bayes_search(X_train, y_train, training_type, info_model_matrix,
 
     elif training_type == 'regression':
 
-        from .implemented_models import models_regression
-        implemented_models, default_parameter_space = models_regression()
+        from .regression_models import regression_models
+        im, dps = regression_models(random_state)
+        implemented_models, default_parameter_space = im, dps
 
         from sklearn.model_selection import ShuffleSplit
         cv = ShuffleSplit(n_splits=n_splits,
@@ -120,8 +122,9 @@ def bayes_search(X_train, y_train, training_type, info_model_matrix,
 
     elif training_type == 'time_series':
 
-        from .implemented_models import models_time_series
-        implemented_models, default_parameter_space = models_time_series()
+        from .time_series_models import time_series_models
+        im, dps = time_series_models(random_state)
+        implemented_models, default_parameter_space = im, dps
 
         from sklearn.model_selection import TimeSeriesSplit
         cv = TimeSeriesSplit(n_splits=n_splits,
