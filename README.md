@@ -1,5 +1,4 @@
 # BRADA
-## BR Distribuidora Advanced Analytics Framework
 
 1. Quality check
 1. Train-test split
