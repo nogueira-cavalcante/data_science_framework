@@ -1,4 +1,4 @@
-# BRADA
+# Data Science Framework
 
 1. Quality check
 1. Train-test split
