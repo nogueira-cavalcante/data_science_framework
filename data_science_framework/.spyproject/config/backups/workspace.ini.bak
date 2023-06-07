@@ -3,6 +3,8 @@ restore_data_on_startup = True
 save_data_on_exit = True
 save_history = True
 save_non_project_files = False
+project_type = empty-project-type
+recent_files = ['automl\\custom_models\\voting_sarimax_xgb_regressor.py', 'time_series_analysis\\last_change_point_detection.py']
 
 [main]
 version = 0.2.0

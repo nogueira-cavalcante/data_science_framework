@@ -34,9 +34,9 @@ def scaling(df, scaling_methods=['min_max'], kwargs=None):
 
     Returns
     -------
-    df_temp : pandas DataFrame
+    pandas DataFrame
         DataFrame escalonado.
-    pipe : object
+    object
         Objeto pipe contendo os objetos dos método escolhidos.
 
     """
@@ -89,6 +89,8 @@ def scaling(df, scaling_methods=['min_max'], kwargs=None):
     pipe = Pipeline(list_scaler)
 
     df_temp = pipe.fit_transform(df)
-    df_temp = pd.DataFrame(data=df_temp, columns=df.columns)
+    df_temp = pd.DataFrame(data=df_temp,
+                           columns=df.columns,
+                           index=df.index)
 
     return df_temp, pipe

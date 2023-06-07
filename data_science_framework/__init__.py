@@ -9,6 +9,7 @@ from .feature_selection import feature_selection
 from .automl import automl
 from .error_analysis import error_analysis
 from .result_interpretation import result_interpretation
+from .time_series_analysis import time_series_analysis
 # production pipeline
 # monitoring
 

@@ -6,7 +6,7 @@
 def general_feature_selection(X_train, y_train, lista_features,
                               modo, forma, valor):
     """
-    Função geral para seleção de variáveis.
+    Função geral para seleção de variáveis para classificação e regressão.
 
     Parameters
     ----------

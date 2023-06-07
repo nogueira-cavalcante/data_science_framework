@@ -1,0 +1,3 @@
+técnicas de monitoramento de modelos
+ - divergencia kl
+ - auto-enconder

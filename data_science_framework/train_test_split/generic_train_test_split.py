@@ -5,7 +5,10 @@
 
 def generic_train_test_split(df, sep_type, target_col, features_cols=None,
                              cat_cont_var_bins=3, test_size=0.2,
-                             random_state=10):
+                             lower_limit_date_train=None,
+                             upper_limit_date_train=None,
+                             lower_limit_date_test=None,
+                             upper_limit_date_test=None, random_state=10):
     """
     Separação genérica do DataFrame de entrada em treino e teste.
 
@@ -37,18 +40,22 @@ def generic_train_test_split(df, sep_type, target_col, features_cols=None,
     test_size : float, opcional
         Tamanho da amostra de teste, dado em fração do total de registros do
         DataFrame de entrada. O valor padrão é  0.2.
+    lower_limit_date_train : string, opcional
+        Data limite inferior para o treino, para sep_type='time_series' e 
+        test_size=None
+    upper_limit_date_train : string, opcional
+        Data limite superior para o treino, para sep_type='time_series' e 
+        test_size=None
+    lower_limit_date_test : string, opcional
+        Data limite inferior para o teste, para sep_type='time_series' e 
+        test_size=None
+    upper_limit_date_test : string, opcional
+        Data limite superior para o teste, para sep_type='time_series' e 
+        test_size=None
     random_state : integer ou RandomState, opcional
          Gerador numérico para ser usado para a geração da amostra
-         aleatória. O valor padrão é 10.
-
-    Raises
-    ------
-    Exception
-        - Quando o valor em test_size não estiver entre 0.0 e 0.5;
-        - Quando o índice do DataFrame não for datetime, caso
-          sep_type="time_series";
-        - Quando sep_type for diferente de "classification", "regression" ou
-         "time_series".
+         aleatória, para sep_type='classification' ou
+         sep_type='regression'. O valor padrão é 10.
 
     Returns
     -------
@@ -64,10 +71,6 @@ def generic_train_test_split(df, sep_type, target_col, features_cols=None,
     """
     import pandas as pd
     from sklearn.model_selection import train_test_split
-
-    if (test_size <= 0) or (test_size >= 0.5):
-        raise Exception('A fração da amostra de teste deve ser maior que' +
-                        ' 0.0 e menor que 0.5.')
 
     if features_cols is None:
         features_cols = list(df.drop(columns=target_col).columns)
@@ -108,10 +111,25 @@ def generic_train_test_split(df, sep_type, target_col, features_cols=None,
                             'formato datetime.')
 
         df_temp.sort_index(inplace=True)
+        
+        if test_size is not None:
 
-        train_size = int(df_temp.shape[0] * (1.-test_size))
-        train = df_temp.iloc[:train_size, :]
-        test = df_temp.iloc[train_size:, :]
+            train_size = int(df_temp.shape[0] * (1.-test_size))
+            train = df_temp.iloc[:train_size, :]
+            test = df_temp.iloc[train_size:, :]
+            
+        elif ((test_size is None) and (lower_limit_date_train is not None) and
+              (upper_limit_date_train is not None) and 
+              (lower_limit_date_test is not None) and
+              (upper_limit_date_test is not None)):
+            
+            train = df_temp.loc[lower_limit_date_train:
+                                upper_limit_date_train, :]
+            test = df_temp.loc[lower_limit_date_test:
+                               upper_limit_date_test, :]
+        else:
+            raise Exception('Caso o valor de test_size seja None os valores ' +
+                            ' limites de datas devem ser especificados.')
 
     else:
         raise Exception('Valor inválido no parâmetro sep_type ' +
