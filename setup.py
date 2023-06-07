@@ -7,7 +7,7 @@ setup(
     name='data_science_framework',
     version='0.0.1',
     description='Data Science Framework',
-    url='https://github.com/nogueira-cavalcante/BR_ML.git',
+    url='https://github.com/nogueira-cavalcante/data_science_framework.git',
     install_requires=requirements,
     author='João Paulo Nogueira Cavalcante',
     author_email='jpncavalcante@gmailcom',
