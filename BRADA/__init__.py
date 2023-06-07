@@ -13,4 +13,4 @@ from .result_interpretation import result_interpretation
 # monitoring
 
 __version__ = '0.0.1'
-__dist_name__ = 'BRADA - BR Distribuidora Advanced Analytics Framework'
+__dist_name__ = 'Data Science Framework'
