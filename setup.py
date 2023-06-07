@@ -4,14 +4,14 @@ with ("requirements.txt").open(encoding="utf8") as f:
     requirements = f.readlines()
 
 setup(
-    name='BRADA',
+    name='data_science_framework',
     version='0.0.1',
-    description='My private package from private github repo',
+    description='Data Science Framework',
     url='https://github.com/nogueira-cavalcante/BR_ML.git',
     install_requires=requirements,
     author='João Paulo Nogueira Cavalcante',
-    author_email='joaocavalcante@br.com.br',
+    author_email='jpncavalcante@gmailcom',
     license='unlicense',
-    packages=['BRADA'],
+    packages=['data_science_framework'],
     zip_safe=False
 )
